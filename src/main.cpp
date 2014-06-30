@@ -32,8 +32,8 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0x12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2");
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // Litecoin: starting difficulty is 1 / 2^12
+uint256 hashGenesisBlock("0x89a47c0df0ab17773b26d2f03a480eb2a11bc022e83e611ca14b88428e0f4252");
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 1); // UnitedScryptCoin: starting difficulty is 1 / 2^12
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 uint256 nBestChainWork = 0;
@@ -65,7 +65,7 @@ map<uint256, set<uint256> > mapOrphanTransactionsByPrev;
 // Constant stuff for coinbase transactions we create:
 CScript COINBASE_FLAGS;
 
-const string strMessageMagic = "Litecoin Signed Message:\n";
+const string strMessageMagic = "UnitedScryptCoin Signed Message:\n";
 
 double dHashesPerSec = 0.0;
 int64 nHPSTimerStart = 0;
@@ -356,7 +356,7 @@ unsigned int LimitOrphanTxSize(unsigned int nMaxOrphans)
 
 bool CTxOut::IsDust() const
 {
-    // Litecoin: IsDust() detection disabled, allows any valid dust to be relayed.
+    // UnitedScryptCoin: IsDust() detection disabled, allows any valid dust to be relayed.
     // The fees imposed on each dust txo is considered sufficient spam deterrant. 
     return false;
 }
@@ -613,7 +613,7 @@ int64 CTransaction::GetMinFee(unsigned int nBlockSize, bool fAllowFree,
             nMinFee = 0;
     }
 
-    // Litecoin
+    // UnitedScryptCoin
     // To limit dust spam, add nBaseFee for each output less than DUST_SOFT_LIMIT
     BOOST_FOREACH(const CTxOut& txout, vout)
         if (txout.nValue < DUST_SOFT_LIMIT)
@@ -1076,13 +1076,13 @@ int64 static GetBlockValue(int nHeight, int64 nFees)
     int64 nSubsidy = 50 * COIN;
 
     // Subsidy is cut in half every 840000 blocks, which will occur approximately every 4 years
-    nSubsidy >>= (nHeight / 840000); // Litecoin: 840k blocks in ~4 years
+    nSubsidy >>= (nHeight / 840000); // UnitedScryptCoin: 840k blocks in ~4 years
 
     return nSubsidy + nFees;
 }
 
-static const int64 nTargetTimespan = 3.5 * 24 * 60 * 60; // Litecoin: 3.5 days
-static const int64 nTargetSpacing = 2.5 * 60; // Litecoin: 2.5 minutes
+static const int64 nTargetTimespan = 30; // UnitedScryptCoin: 3.5 days
+static const int64 nTargetSpacing = 10; // UnitedScryptCoin: 2.5 minutes
 static const int64 nInterval = nTargetTimespan / nTargetSpacing;
 
 //
@@ -1141,7 +1141,7 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
         return pindexLast->nBits;
     }
 
-    // Litecoin: This fixes an issue where a 51% attack can change difficulty at will.
+    // UnitedScryptCoin: This fixes an issue where a 51% attack can change difficulty at will.
     // Go back the full period unless it's the first retarget after genesis. Code courtesy of Art Forz
     int blockstogoback = nInterval-1;
     if ((pindexLast->nHeight+1) != nInterval)
@@ -1991,14 +1991,14 @@ bool CBlock::AddToBlockIndex(CValidationState &state, const CDiskBlockPos &pos)
 int GetAuxPowStartBlock()
 {
     if (fTestNet)
-        return INT_MAX; // never
+        return 1; // never
     else
-        return INT_MAX; // never
+        return 1; // never
 }
 
 int GetOurChainID()
 {
-    return 0x0000;
+    return 0x0001;
 }
 
 bool CBlockHeader::CheckProofOfWork(int nHeight) const
@@ -2145,7 +2145,7 @@ bool CBlock::CheckBlock(CValidationState &state, int nHeight, bool fCheckPOW, bo
     if (vtx.empty() || vtx.size() > MAX_BLOCK_SIZE || ::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
         return state.DoS(100, error("CheckBlock() : size limits failed"));
 
-    // Litecoin: Special short-term limits to avoid 10,000 BDB lock limit:
+    // UnitedScryptCoin: Special short-term limits to avoid 10,000 BDB lock limit:
     if (GetBlockTime() < 1376568000)  // stop enforcing 15 August 2013 00:00:00
     {
         // Rule is: #unique txids referenced <= 4,500
@@ -2307,7 +2307,7 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
 
 bool CBlockIndex::IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned int nRequired, unsigned int nToCheck)
 {
-    // Litecoin: temporarily disable v2 block lockin until we are ready for v2 transition
+    // UnitedScryptCoin: temporarily disable v2 block lockin until we are ready for v2 transition
     return false;
     unsigned int nFound = 0;
     for (unsigned int i = 0; i < nToCheck && nFound < nRequired && pstart != NULL; i++)
@@ -2788,11 +2788,11 @@ bool LoadBlockIndex()
 {
     if (fTestNet)
     {
-        pchMessageStart[0] = 0xfc;
-        pchMessageStart[1] = 0xc1;
-        pchMessageStart[2] = 0xb7;
-        pchMessageStart[3] = 0xdc;
-        hashGenesisBlock = uint256("0xf5ae71e26c74beacc88382716aced69cddf3dffff24f384e1808905e0188f68f");
+        pchMessageStart[0] = 0xf1;
+        pchMessageStart[1] = 0xcc;
+        pchMessageStart[2] = 0xbf;
+        pchMessageStart[3] = 0xda;
+        hashGenesisBlock = uint256("0xb92bc49428b600d337b78489b252a8f42b41d4aafcd220b022236444a9bd0b2a");
     }
 
     //
@@ -2817,15 +2817,21 @@ bool InitBlockIndex() {
 
     // Only add the genesis block if not reindexing (in which case we reuse the one already on disk)
     if (!fReindex) {
-        // Genesis Block:
-        // CBlock(hash=12a765e31ffd4059bada, PoW=0000050c34a64b415b6b, ver=1, hashPrevBlock=00000000000000000000, hashMerkleRoot=97ddfbbae6, nTime=1317972665, nBits=1e0ffff0, nNonce=2084524493, vtx=1)
-        //   CTransaction(hash=97ddfbbae6, ver=1, vin.size=1, vout.size=1, nLockTime=0)
-        //     CTxIn(COutPoint(0000000000, -1), coinbase 04ffff001d0104404e592054696d65732030352f4f63742f32303131205374657665204a6f62732c204170706c65e280997320566973696f6e6172792c2044696573206174203536)
-        //     CTxOut(nValue=50.00000000, scriptPubKey=040184710fa689ad5023690c80f3a4)
-        //   vMerkleTree: 97ddfbbae6
+        // UnitedScryptCoin Genesis Block:
+        // CBlock(hash=89a47c0df0ab17773b26d2f03a480eb2a11bc022e83e611ca14b88428e0f4252,
+        //      PoW=000008c4ab357d9eae69b252b0b3bd90e3d414372442774806d9a6e80a9778b6,
+        //      ver=1, hashPrevBlock=0000000000000000000000000000000000000000000000000000000000000000,
+        //      hashMerkleRoot=f7585b5ce116156d39dabe4a7cd9fb15b0f3b39200bcdf3bd98ee06b1c84cad0,
+        //      nTime=1385836560, nBits=1e0ffff0, nNonce=958772, vtx=1)
+        //  CTransaction(hash=f7585b5ce116156d39dabe4a7cd9fb15b0f3b39200bcdf3bd98ee06b1c84cad0,
+        //          ver=1, vin.size=1, vout.size=1, nLockTime=0)
+        //      CTxIn(COutPoint(0000000000000000000000000000000000000000000000000000000000000000,
+        //                      4294967295),
+        //              coinbase 04ffff001d01044c504c652046696761726f20323031332f31312f33302031393a33362043455420437576696c6c6965722072656c61746976697365206c61206d6f62696c69736174696f6e2064657320726f757469657273)
+        //      CTxOut(nValue=50.00000000, scriptPubKey=040184710fa689ad5023690c80f3a4)
 
         // Genesis block
-        const char* pszTimestamp = "NY Times 05/Oct/2011 Steve Jobs, Apple’s Visionary, Dies at 56";
+        const char* pszTimestamp = "Le Figaro 2013/11/30 19:36 CET Cuvillier relativise la mobilisation des routiers";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
@@ -2837,14 +2843,14 @@ bool InitBlockIndex() {
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1317972665;
+        block.nTime    = 1385836560;
         block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 2084524493;
+        block.nNonce   = 958772;
 
         if (fTestNet)
         {
-            block.nTime    = 1317798646;
-            block.nNonce   = 385270584;
+            block.nTime    = 1385836559;
+            block.nNonce   = 72962;
         }
 
         //// debug print
@@ -2852,7 +2858,7 @@ bool InitBlockIndex() {
         printf("%s\n", hash.ToString().c_str());
         printf("%s\n", hashGenesisBlock.ToString().c_str());
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("0x97ddfbbae6be97fd6cdf3e7ca13232a3afff2353e29badfab7f73011edd4ced9"));
+        assert(block.hashMerkleRoot == uint256("0xf7585b5ce116156d39dabe4a7cd9fb15b0f3b39200bcdf3bd98ee06b1c84cad0"));
         block.print();
         assert(hash == hashGenesisBlock);
 
@@ -3125,7 +3131,7 @@ bool static AlreadyHave(const CInv& inv)
 // The message start string is designed to be unlikely to occur in normal data.
 // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
 // a large 4-byte int at any alignment.
-unsigned char pchMessageStart[4] = { 0xfb, 0xc0, 0xb6, 0xdb }; // Litecoin: increase each by adding 2 to bitcoin's value.
+unsigned char pchMessageStart[4] = { 0xfc, 0xc1, 0xba, 0xdf }; // UnitedScryptCoin: increase each by adding 2 to bitcoin's value.
 
 
 void static ProcessGetData(CNode* pfrom)
@@ -4167,7 +4173,7 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// LitecoinMiner
+// UnitedScryptCoinMiner
 //
 
 int static FormatHashBlocks(void* pbuffer, unsigned int len)
@@ -4586,7 +4592,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
             return error("AUX POW parent hash %s is not under target %s", auxpow->GetParentBlockHash().GetHex().c_str(), hashTarget.GetHex().c_str());
 
         //// debug print
-        printf("LitecoinMiner:\n");
+        printf("UnitedScryptCoinMiner:\n");
         printf("AUX proof-of-work found  \n     our hash: %s   \n  parent hash: %s  \n       target: %s\n",
                 hash.GetHex().c_str(),
                 auxpow->GetParentBlockHash().GetHex().c_str(),
@@ -4599,7 +4605,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
             return false;
 
         //// debug print
-        printf("LitecoinMiner:\n");
+        printf("UnitedScryptCoinMiner:\n");
         printf("proof-of-work found  \n  hash: %s  \ntarget: %s\n", hash.GetHex().c_str(), hashTarget.GetHex().c_str());
     }
     
@@ -4611,7 +4617,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
     {
         LOCK(cs_main);
         if (pblock->hashPrevBlock != hashBestChain)
-            return error("LitecoinMiner : generated block is stale");
+            return error("UnitedScryptCoinMiner : generated block is stale");
 
         // Remove key from key pool
         reservekey.KeepKey();
@@ -4625,7 +4631,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
         // Process this block the same as if we had received it from another node
         CValidationState state;
         if (!ProcessBlock(state, NULL, pblock))
-            return error("LitecoinMiner : ProcessBlock, block not accepted");
+            return error("UnitedScryptCoinMiner : ProcessBlock, block not accepted");
     }
 
     return true;
@@ -4673,9 +4679,9 @@ CBlockHeader CBlockIndex::GetBlockHeader() const
     return block;
 }
 
-void static LitecoinMiner(CWallet *pwallet)
+void static ScryptMiner(CWallet *pwallet)
 {
-    printf("LitecoinMiner started\n");
+    printf("ScryptMiner started\n");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
     RenameThread("litecoin-miner");
 
@@ -4699,7 +4705,7 @@ void static LitecoinMiner(CWallet *pwallet)
         CBlock *pblock = &pblocktemplate->block;
         IncrementExtraNonce(pblock, pindexPrev, nExtraNonce);
 
-        printf("Running LitecoinMiner with %"PRIszu" transactions in block (%u bytes)\n", pblock->vtx.size(),
+        printf("Running ScryptMiner with %"PRIszu" transactions in block (%u bytes)\n", pblock->vtx.size(),
                ::GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION));
 
         //
@@ -4798,7 +4804,7 @@ void static LitecoinMiner(CWallet *pwallet)
     } }
     catch (boost::thread_interrupted)
     {
-        printf("LitecoinMiner terminated\n");
+        printf("ScryptMiner terminated\n");
         throw;
     }
 }
@@ -4823,7 +4829,7 @@ void GenerateBitcoins(bool fGenerate, CWallet* pwallet)
 
     minerThreads = new boost::thread_group();
     for (int i = 0; i < nThreads; i++)
-        minerThreads->create_thread(boost::bind(&LitecoinMiner, pwallet));
+        minerThreads->create_thread(boost::bind(&ScryptMiner, pwallet));
 }
 
 // Amount compression:

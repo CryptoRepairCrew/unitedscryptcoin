@@ -1,4 +1,4 @@
-Name Litecoin
+Name UnitedScryptCoin
 
 RequestExecutionLevel highest
 SetCompressor /SOLID lzma
@@ -6,23 +6,23 @@ SetCompressor /SOLID lzma
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
 !define VERSION 0.8.6.2
-!define COMPANY "Litecoin project"
+!define COMPANY "UnitedScryptCoin project"
 !define URL http://www.litecoin.org/
 
 # MUI Symbol Definitions
-!define MUI_ICON "../share/pixmaps/bitcoin.ico"
-!define MUI_WELCOMEFINISHPAGE_BITMAP "../share/pixmaps/nsis-wizard.bmp"
+!define MUI_ICON "../share/pixmaps/MicroCash.ico"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "../share/pixmaps/nsis-wizard-usc.bmp"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_RIGHT
-!define MUI_HEADERIMAGE_BITMAP "../share/pixmaps/nsis-header.bmp"
+!define MUI_HEADERIMAGE_BITMAP "../share/pixmaps/nsis-header-usc.bmp"
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT HKLM
 !define MUI_STARTMENUPAGE_REGISTRY_KEY ${REGKEY}
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME StartMenuGroup
-!define MUI_STARTMENUPAGE_DEFAULTFOLDER Litecoin
-!define MUI_FINISHPAGE_RUN $INSTDIR\litecoin-qt.exe
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER UnitedScryptCoin
+!define MUI_FINISHPAGE_RUN $INSTDIR\MicroCash-qt.exe
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "../share/pixmaps/nsis-wizard.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "../share/pixmaps/nsis-wizard-usc.bmp"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 
 # Included files
@@ -45,14 +45,14 @@ Var StartMenuGroup
 !insertmacro MUI_LANGUAGE English
 
 # Installer attributes
-OutFile litecoin-0.8.6.2-win32-setup.exe
-InstallDir $PROGRAMFILES\Litecoin
+OutFile MicroCash-0.8.6.2-win32-setup.exe
+InstallDir $PROGRAMFILES\UnitedScryptCoin
 CRCCheck on
 XPStyle on
 BrandingText " "
 ShowInstDetails show
 VIProductVersion 0.8.6.2
-VIAddVersionKey ProductName Litecoin
+VIAddVersionKey ProductName UnitedScryptCoin
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
 VIAddVersionKey CompanyWebsite "${URL}"
@@ -66,18 +66,18 @@ ShowUninstDetails show
 Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
-    File ../release/litecoin-qt.exe
+    File ../release/MicroCash-qt.exe
     File /oname=COPYING.txt ../COPYING
     File /oname=readme.txt ../doc/README_windows.txt
     SetOutPath $INSTDIR\daemon
-    File ../src/litecoind.exe
+    File ../src/MicroCashd.exe
     SetOutPath $INSTDIR\src
     File /r /x *.exe /x *.o ../src\*.*
     SetOutPath $INSTDIR
     WriteRegStr HKCU "${REGKEY}\Components" Main 1
 
     # Remove old wxwidgets-based-bitcoin executable and locales:
-    Delete /REBOOTOK $INSTDIR\litecoin.exe
+    Delete /REBOOTOK $INSTDIR\MicroCash.exe
     RMDir /r /REBOOTOK $INSTDIR\locale
 SectionEnd
 
@@ -87,8 +87,8 @@ Section -post SEC0001
     WriteUninstaller $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     CreateDirectory $SMPROGRAMS\$StartMenuGroup
-    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Litecoin.lnk" $INSTDIR\litecoin-qt.exe
-    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Uninstall Litecoin.lnk" $INSTDIR\uninstall.exe
+    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\UnitedScryptCoin.lnk" $INSTDIR\MicroCash-qt.exe
+    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Uninstall UnitedScryptCoin.lnk" $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_END
     WriteRegStr HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayName "$(^Name)"
     WriteRegStr HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayVersion "${VERSION}"
@@ -98,10 +98,10 @@ Section -post SEC0001
     WriteRegStr HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" UninstallString $INSTDIR\uninstall.exe
     WriteRegDWORD HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoModify 1
     WriteRegDWORD HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoRepair 1
-    WriteRegStr HKCR "litecoin" "URL Protocol" ""
-    WriteRegStr HKCR "litecoin" "" "URL:Litecoin"
-    WriteRegStr HKCR "litecoin\DefaultIcon" "" $INSTDIR\litecoin-qt.exe
-    WriteRegStr HKCR "litecoin\shell\open\command" "" '"$INSTDIR\litecoin-qt.exe" "%1"'
+    WriteRegStr HKCR "MicroCash" "URL Protocol" ""
+    WriteRegStr HKCR "MicroCash" "" "URL:UnitedScryptCoin"
+    WriteRegStr HKCR "MicroCash\DefaultIcon" "" $INSTDIR\MicroCash-qt.exe
+    WriteRegStr HKCR "MicroCash\shell\open\command" "" '"$INSTDIR\MicroCash-qt.exe" "%1"'
 SectionEnd
 
 # Macro for selecting uninstaller sections
@@ -119,7 +119,7 @@ done${UNSECTION_ID}:
 
 # Uninstaller sections
 Section /o -un.Main UNSEC0000
-    Delete /REBOOTOK $INSTDIR\litecoin-qt.exe
+    Delete /REBOOTOK $INSTDIR\MicroCash-qt.exe
     Delete /REBOOTOK $INSTDIR\COPYING.txt
     Delete /REBOOTOK $INSTDIR\readme.txt
     RMDir /r /REBOOTOK $INSTDIR\daemon
@@ -129,8 +129,8 @@ SectionEnd
 
 Section -un.post UNSEC0001
     DeleteRegKey HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)"
-    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\Uninstall Litecoin.lnk"
-    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\Litecoin.lnk"
+    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\Uninstall UnitedScryptCoin.lnk"
+    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\UnitedScryptCoin.lnk"
     Delete /REBOOTOK "$SMSTARTUP\Litecoin.lnk"
     Delete /REBOOTOK $INSTDIR\uninstall.exe
     Delete /REBOOTOK $INSTDIR\debug.log
@@ -139,7 +139,7 @@ Section -un.post UNSEC0001
     DeleteRegValue HKCU "${REGKEY}" Path
     DeleteRegKey /IfEmpty HKCU "${REGKEY}\Components"
     DeleteRegKey /IfEmpty HKCU "${REGKEY}"
-    DeleteRegKey HKCR "litecoin"
+    DeleteRegKey HKCR "unitedscryptocin"
     RmDir /REBOOTOK $SMPROGRAMS\$StartMenuGroup
     RmDir /REBOOTOK $INSTDIR
     Push $R0
