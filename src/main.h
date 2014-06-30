@@ -26,6 +26,7 @@ class CAuxPow;
 
 struct CBlockIndexWorkComparator;
 
+static const uint256 hashGenesisBlockOfficial("0x89a47c0df0ab17773b26d2f03a480eb2a11bc022e83e611ca14b88428e0f4252");
 /** The maximum allowed size for a serialized block, in bytes (network rule) */
 static const unsigned int MAX_BLOCK_SIZE = 1000000;                      // 1000KB block hard limit
 /** Obsolete: maximum size for mined blocks */
