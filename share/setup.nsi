@@ -10,7 +10,7 @@ SetCompressor /SOLID lzma
 !define URL http://www.litecoin.org/
 
 # MUI Symbol Definitions
-!define MUI_ICON "../share/pixmaps/unitedscryptcoin.ico"
+!define MUI_ICON "../share/pixmaps/MicroCash.ico"
 !define MUI_WELCOMEFINISHPAGE_BITMAP "../share/pixmaps/nsis-wizard-usc.bmp"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_RIGHT
@@ -20,7 +20,7 @@ SetCompressor /SOLID lzma
 !define MUI_STARTMENUPAGE_REGISTRY_KEY ${REGKEY}
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME StartMenuGroup
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER UnitedScryptCoin
-!define MUI_FINISHPAGE_RUN $INSTDIR\unitedscryptcoin-qt.exe
+!define MUI_FINISHPAGE_RUN $INSTDIR\MicroCash-qt.exe
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "../share/pixmaps/nsis-wizard-usc.bmp"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
@@ -45,7 +45,7 @@ Var StartMenuGroup
 !insertmacro MUI_LANGUAGE English
 
 # Installer attributes
-OutFile unitedscryptcoin-0.8.6.2-win32-setup.exe
+OutFile MicroCash-0.8.6.2-win32-setup.exe
 InstallDir $PROGRAMFILES\UnitedScryptCoin
 CRCCheck on
 XPStyle on
@@ -66,18 +66,18 @@ ShowUninstDetails show
 Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
-    File ../release/unitedscryptcoin-qt.exe
+    File ../release/MicroCash-qt.exe
     File /oname=COPYING.txt ../COPYING
     File /oname=readme.txt ../doc/README_windows.txt
     SetOutPath $INSTDIR\daemon
-    File ../src/unitedscryptcoind.exe
+    File ../src/MicroCashd.exe
     SetOutPath $INSTDIR\src
     File /r /x *.exe /x *.o ../src\*.*
     SetOutPath $INSTDIR
     WriteRegStr HKCU "${REGKEY}\Components" Main 1
 
     # Remove old wxwidgets-based-bitcoin executable and locales:
-    Delete /REBOOTOK $INSTDIR\unitedscryptcoin.exe
+    Delete /REBOOTOK $INSTDIR\MicroCash.exe
     RMDir /r /REBOOTOK $INSTDIR\locale
 SectionEnd
 
@@ -87,7 +87,7 @@ Section -post SEC0001
     WriteUninstaller $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     CreateDirectory $SMPROGRAMS\$StartMenuGroup
-    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\UnitedScryptCoin.lnk" $INSTDIR\unitedscryptcoin-qt.exe
+    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\UnitedScryptCoin.lnk" $INSTDIR\MicroCash-qt.exe
     CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Uninstall UnitedScryptCoin.lnk" $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_END
     WriteRegStr HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayName "$(^Name)"
@@ -98,10 +98,10 @@ Section -post SEC0001
     WriteRegStr HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" UninstallString $INSTDIR\uninstall.exe
     WriteRegDWORD HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoModify 1
     WriteRegDWORD HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoRepair 1
-    WriteRegStr HKCR "unitedscryptcoin" "URL Protocol" ""
-    WriteRegStr HKCR "unitedscryptcoin" "" "URL:UnitedScryptCoin"
-    WriteRegStr HKCR "unitedscryptcoin\DefaultIcon" "" $INSTDIR\unitedscryptcoin-qt.exe
-    WriteRegStr HKCR "unitedscryptcoin\shell\open\command" "" '"$INSTDIR\unitedscryptcoin-qt.exe" "%1"'
+    WriteRegStr HKCR "MicroCash" "URL Protocol" ""
+    WriteRegStr HKCR "MicroCash" "" "URL:UnitedScryptCoin"
+    WriteRegStr HKCR "MicroCash\DefaultIcon" "" $INSTDIR\MicroCash-qt.exe
+    WriteRegStr HKCR "MicroCash\shell\open\command" "" '"$INSTDIR\MicroCash-qt.exe" "%1"'
 SectionEnd
 
 # Macro for selecting uninstaller sections
@@ -119,7 +119,7 @@ done${UNSECTION_ID}:
 
 # Uninstaller sections
 Section /o -un.Main UNSEC0000
-    Delete /REBOOTOK $INSTDIR\unitedscryptcoin-qt.exe
+    Delete /REBOOTOK $INSTDIR\MicroCash-qt.exe
     Delete /REBOOTOK $INSTDIR\COPYING.txt
     Delete /REBOOTOK $INSTDIR\readme.txt
     RMDir /r /REBOOTOK $INSTDIR\daemon

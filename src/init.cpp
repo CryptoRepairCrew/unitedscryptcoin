@@ -181,10 +181,10 @@ bool AppInit(int argc, char* argv[])
             // First part of help message is specific to bitcoind / RPC client
             std::string strUsage = _("UnitedScryptCoin version") + " " + FormatFullVersion() + "\n\n" +
                 _("Usage:") + "\n" +
-                  "  unitedscryptcoind [options]                     " + "\n" +
-                  "  unitedscryptcoind [options] <command> [params]  " + _("Send command to -server or unitedscryptcoind") + "\n" +
-                  "  unitedscryptcoind [options] help                " + _("List commands") + "\n" +
-                  "  unitedscryptcoind [options] help <command>      " + _("Get help for a command") + "\n";
+                  "  MicroCashd [options]                     " + "\n" +
+                  "  MicroCashd [options] <command> [params]  " + _("Send command to -server or MicroCashd") + "\n" +
+                  "  MicroCashd [options] help                " + _("List commands") + "\n" +
+                  "  MicroCashd [options] help <command>      " + _("Get help for a command") + "\n";
 
             strUsage += "\n" + HelpMessage();
 
@@ -194,7 +194,7 @@ bool AppInit(int argc, char* argv[])
 
         // Command-line RPC
         for (int i = 1; i < argc; i++)
-            if (!IsSwitchChar(argv[i][0]) && !boost::algorithm::istarts_with(argv[i], "unitedscryptcoin:"))
+            if (!IsSwitchChar(argv[i][0]) && !boost::algorithm::istarts_with(argv[i], "MicroCash:"))
                 fCommandLine = true;
 
         if (fCommandLine)
@@ -297,8 +297,8 @@ std::string HelpMessage()
 {
     string strUsage = _("Options:") + "\n" +
         "  -?                     " + _("This help message") + "\n" +
-        "  -conf=<file>           " + _("Specify configuration file (default: unitedscryptcoin.conf)") + "\n" +
-        "  -pid=<file>            " + _("Specify pid file (default: unitedscryptcoind.pid)") + "\n" +
+        "  -conf=<file>           " + _("Specify configuration file (default: MicroCash.conf)") + "\n" +
+        "  -pid=<file>            " + _("Specify pid file (default: MicroCashd.pid)") + "\n" +
         "  -gen                   " + _("Generate coins (default: 0)") + "\n" +
         "  -datadir=<dir>         " + _("Specify data directory") + "\n" +
         "  -dbcache=<n>           " + _("Set database cache size in megabytes (default: 25)") + "\n" +
